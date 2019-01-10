@@ -176,7 +176,8 @@
         var id = pointdata.id;
         var x = pointdata.X;
         var y = pointdata.Y;
-        var hmp = (pointdata.hmp);
+        var hmp = pointdata.hmp;
+        hmp.fixed(1);
         var hmpl = pointdata.letter;
         var hmpz = pointdata.zijde;
         var weg = pointdata.weg;
