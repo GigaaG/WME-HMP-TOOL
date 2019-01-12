@@ -2,7 +2,7 @@
 // @name         WME Import
 // @icon         https://cdn1.iconfinder.com/data/icons/Momentum_MatteEntireSet/32/list-edit.png
 // @namespace    WMEI
-// @version      1.1.1
+// @version      2019.01.12.1
 // @description  Import place points into the Waze Map
 // @author       Sjors 'GigaaG' Luyckx
 // @copyright    2019, Sjors 'GigaaG' Luyckx
@@ -44,15 +44,20 @@
             '<div>',
             '<h2>WME Import</h2>',
             '<b>Hoi ' + username + '! </b>',
-            '<p>Selecteer uit onderstaand dropdown menu de weg waarvan je de hectometerpaaltjes wilt gaan importeren.</p>',
-            '<span><select style="width:25%;align:center" id="WMEIRoadSelect"><option value=""></option></select><button id="WMEIdownloadButton"><center>Klik om te downloaden</center></button><span>',
-            '<p id="savedMessage"></p>',
-            '</div>'
+            '<p>Selecteer uit onderstaand dropdown menu de weg waarvan je de hectometerpaaltjes wilt gaan importeren. Voeg eventuele extra opties toe in de input velden en druk vervolgens op de donwload button.</p>',
+            '<b>Opties:</b><br>',
+            '<span>Begin: <input id="beginHMP" style="width:50px"></input>',
+            '<span>Eind: <input id="eindHMP" style="width:50px"></input>',
+            '<span>Letter: <input id="letter" style="width:25px"></input><br>',
+            '<span><select style="width:25%;margin-top:5px;align:center" id="WMEIRoadSelect"><option value=""></option></select><button id="WMEIdownloadButton"><center>Klik om te downloaden</center></button><span>',
+            '<p id="WMEIMessage"></p>',
         ].join(' '));
 
         new WazeWrap.Interface.Tab('WME Import', $section.html(), initializeSettings);
         document.getElementById('WMEIdownloadButton').style.visibility = "hidden";
         document.getElementById('WMEIRoadSelect').addEventListener("change", downloadButton);
+        document.getElementById('beginHMP').addEventListener("keyup", downloadButton);
+        document.getElementById('eindHMP').addEventListener("keyup", downloadButton);
         document.getElementById('WMEIdownloadButton').addEventListener("click", downloadHMPS);
         document.getElementsByClassName('toolbar-button waze-icon-save')[0].addEventListener("click", saveImported);
         requestAssignedRoads();
@@ -68,10 +73,6 @@
         $.ajax({
             url: 'https://hmps.sjorsluyckx.nl/save.php',
             type: "GET",
-            headers: {
-              "accept": "application/json",
-              "Access-Control-Allow-Origin":"*"
-            },
             data: {"ID":jsonString},
             dataType: 'json',
             crossDomain: true,
@@ -109,11 +110,17 @@
         }
     }
 
-    function downloadButton(selectedRoad){
+    function downloadButton(){
         var value = document.getElementById('WMEIRoadSelect').value
+        var beginHMP = document.getElementById('beginHMP').value
+        var eindHMP = document.getElementById('eindHMP').value
         var button = document.getElementById('WMEIdownloadButton')
         if (value != ""){
-            button.style.visibility = "visible";
+            if ((beginHMP == "" && eindHMP == "") || (beginHMP != "" && eindHMP != "")){
+                button.style.visibility = "visible";
+            } else {
+                button.style.visibility = "hidden";
+            }
         } else {
             button.style.visibility = "hidden";
         }
@@ -121,14 +128,13 @@
 
     function getHMPS(){
         var weg = document.getElementById('WMEIRoadSelect').value
+        var beginHMP = document.getElementById('beginHMP').value
+        var eindHMP = document.getElementById('eindHMP').value
+        var letter = document.getElementById('letter').value
         $.ajax({
             url: 'https://hmps.sjorsluyckx.nl/hmp.php',
             type: "GET",
-            headers: {
-              "accept": "application/json",
-              "Access-Control-Allow-Origin":"*"
-            },
-            data: {"weg":weg},
+            data: {"weg":weg,"begin":beginHMP,"eind":eindHMP,"letter":letter},
             dataType: 'json',
             crossDomain: true,
             success: function(response){
@@ -147,10 +153,6 @@
         $.ajax({
             url: 'https://hmps.sjorsluyckx.nl/roads.php',
             type: "GET",
-            headers: {
-              "accept": "application/json",
-              "Access-Control-Allow-Origin":"*"
-            },
             data: {'editor':username},
             dataType: 'json',
             crossDomain: true,
@@ -222,7 +224,7 @@
         W.model.actionManager.add(new AddPlace(NewPlace));
         W.selectionManager.setSelectedModels([NewPlace]);
 
-        // Select the added place. 1 out 2 fails, so try again when fails.
+        // Because selecting fails sometimes.
         try {
             W.selectionManager.setSelectedModels([NewPlace]);
         } catch (error) {
