@@ -2,7 +2,7 @@
 // @name         WME Import
 // @icon         https://cdn1.iconfinder.com/data/icons/Momentum_MatteEntireSet/32/list-edit.png
 // @namespace    WMEI
-// @version      1.1.1
+// @version      2019.01.15.2
 // @description  Import place points into the Waze Map
 // @author       Sjors 'GigaaG' Luyckx
 // @copyright    2019, Sjors 'GigaaG' Luyckx
