@@ -2,7 +2,7 @@
 // @name         WME Import
 // @icon         https://cdn1.iconfinder.com/data/icons/Momentum_MatteEntireSet/32/list-edit.png
 // @namespace    WMEI
-// @version      2019.01.12.1
+// @version      1.1.1
 // @description  Import place points into the Waze Map
 // @author       Sjors 'GigaaG' Luyckx
 // @copyright    2019, Sjors 'GigaaG' Luyckx
@@ -69,7 +69,7 @@
     function saveImported(){
         if (imported.length > 0){
         var jsonString = JSON.stringify(imported);
-        console.log(jsonString);
+        
         $.ajax({
             url: 'https://hmps.sjorsluyckx.nl/save.php',
             type: "GET",
@@ -77,9 +77,8 @@
             dataType: 'json',
             crossDomain: true,
             success: function(response){
-                console.log(response);
                 var countSaved = imported.length;
-                document.getElementById('savedMessage').innerHTML = countSaved + " hmp's zijn geimporteerd en opgeslagen in de database.";
+                document.getElementById('WMEIMessage').innerHTML = countSaved + " hmp's zijn geimporteerd en opgeslagen in de database.";
                 imported = [];
             },
             error: function(response){
@@ -92,7 +91,7 @@
     function downloadHMPS(){
         getHMPS();
         var WMEButton = document.getElementById('WMEImportButton');
-        console.log(WMEButton);
+        
         if (WMEButton == null){
             var editbuttons = document.getElementById('edit-buttons');
             var button = document.createElement('button');
@@ -106,7 +105,7 @@
         } else {
             console.log('Button already exists');
             WMEButton.innerText = 'Loading...';
-            document.getElementById('savedMessage').innerHTML = ""
+            document.getElementById('WMEIMessage').innerHTML = ""
         }
     }
 
@@ -138,9 +137,10 @@
             dataType: 'json',
             crossDomain: true,
             success: function(response){
-                console.log(response);
                 hmpdata = response;
+                console.log(hmpdata);
                 count = response.length
+                document.getElementById('WMEIMessage').innerHTML = count + " hmp's zijn geimporteerd en staan klaar om geimporteerd te worden.";
                 document.getElementById('WMEImportButton').innerText = "Volgende (" + count + ")";
             },
             error: function(response){
@@ -179,7 +179,8 @@
         var x = pointdata.X;
         var y = pointdata.Y;
         var hmp = pointdata.hmp;
-        hmp.fixed(1);
+        console.log(hmp);
+        hmp = parseFloat(hmp).toFixed(1);
         var hmpl = pointdata.letter;
         var hmpz = pointdata.zijde;
         var weg = pointdata.weg;
@@ -196,7 +197,6 @@
 
         // Adjust the i variable and add ID to array
         imported.push(id);
-        console.log(imported);
         h = h + 1;
         document.getElementById('WMEImportButton').innerText = "Next import (" + (count - h) + ")";
 
@@ -222,7 +222,6 @@
 
         // Adding the NewPlace to the map
         W.model.actionManager.add(new AddPlace(NewPlace));
-        W.selectionManager.setSelectedModels([NewPlace]);
 
         // Because selecting fails sometimes.
         try {
