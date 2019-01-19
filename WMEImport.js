@@ -2,7 +2,7 @@
 // @name         WME Import
 // @icon         https://cdn1.iconfinder.com/data/icons/Momentum_MatteEntireSet/32/list-edit.png
 // @namespace    WMEI
-// @version      2019.01.15.2
+// @version      2019.01.19.3
 // @description  Import place points into the Waze Map
 // @author       Sjors 'GigaaG' Luyckx
 // @copyright    2019, Sjors 'GigaaG' Luyckx
@@ -40,12 +40,12 @@
 
     function init(){
         username = W.loginManager.user.userName;
-        rankUser = W.loginManager.user.rank; 
+        rankUser = W.loginManager.user.rank;
         if (rankUser < 3){
-            locklevel = 3
+            lockLevel = rankUser
         } else {
-            locklevel = rankUser
-        }        
+            lockLevel = 3
+        }
 
         var $section = $("<div>");
         $section.html([
@@ -77,7 +77,7 @@
     function saveImported(){
         if (imported.length > 0){
         var jsonString = JSON.stringify(imported);
-        
+
         $.ajax({
             url: 'https://hmps.sjorsluyckx.nl/save.php',
             type: "GET",
@@ -99,7 +99,7 @@
     function downloadHMPS(){
         getHMPS();
         var WMEButton = document.getElementById('WMEImportButton');
-        
+
         if (WMEButton == null){
             var editbuttons = document.getElementById('edit-buttons');
             var button = document.createElement('button');
