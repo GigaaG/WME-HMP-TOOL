@@ -34,10 +34,18 @@
     var count;
     var h = 0;
     var username;
+    var rankUser;
+    var lockLevel;
     var imported = [];
 
     function init(){
         username = W.loginManager.user.userName;
+        rankUser = W.loginManager.user.rank; 
+        if (rankUser < 3){
+            locklevel = 3
+        } else {
+            locklevel = rankUser
+        }        
 
         var $section = $("<div>");
         $section.html([
@@ -218,7 +226,7 @@
         NewPlace.attributes.categories.push("JUNCTION_INTERCHANGE");
         NewPlace.attributes.name = title;
         NewPlace.attributes.description = "Ten behoeve van de hulpdiensten. \nBron: Rijkswaterstaat";
-        NewPlace.attributes.lockRank = 2; // <- insert lock level -1
+        NewPlace.attributes.lockRank = lockLevel; // <- insert lock level -1
 
         // Adding the NewPlace to the map
         W.model.actionManager.add(new AddPlace(NewPlace));
