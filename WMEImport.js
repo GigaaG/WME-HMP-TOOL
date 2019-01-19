@@ -140,7 +140,7 @@
                 hmpdata = response;
                 console.log(hmpdata);
                 count = response.length
-                document.getElementById('WMEIMessage').innerHTML = count + " hmp's zijn geimporteerd en staan klaar om geimporteerd te worden.";
+                document.getElementById('WMEIMessage').innerHTML = count + " hmp's staan klaar om geimporteerd te worden.";
                 document.getElementById('WMEImportButton').innerText = "Volgende (" + count + ")";
             },
             error: function(response){
