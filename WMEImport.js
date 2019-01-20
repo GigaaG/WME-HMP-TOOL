@@ -2,7 +2,7 @@
 // @name         WME Import
 // @icon         https://cdn1.iconfinder.com/data/icons/Momentum_MatteEntireSet/32/list-edit.png
 // @namespace    WMEI
-// @version      2019.01.19.3
+// @version      2019.01.20.6
 // @description  Import place points into the Waze Map
 // @author       Sjors 'GigaaG' Luyckx
 // @copyright    2019, Sjors 'GigaaG' Luyckx
@@ -37,6 +37,17 @@
     var rankUser;
     var lockLevel;
     var imported = [];
+
+    var waitForEl = function(selector, callback) {
+        if (jQuery(selector).length) {
+            console.log('Save Popover enabled');
+            callback();
+        } else {
+            setTimeout(function() {
+                waitForEl(selector, callback);
+            }, 100);
+        }
+    };
 
     function init(){
         username = W.loginManager.user.userName;
@@ -75,25 +86,43 @@
     }
 
     function saveImported(){
-        if (imported.length > 0){
-        var jsonString = JSON.stringify(imported);
-
-        $.ajax({
-            url: 'https://hmps.sjorsluyckx.nl/save.php',
-            type: "GET",
-            data: {"ID":jsonString},
-            dataType: 'json',
-            crossDomain: true,
-            success: function(response){
-                var countSaved = imported.length;
-                document.getElementById('WMEIMessage').innerHTML = countSaved + " hmp's zijn geimporteerd en opgeslagen in de database.";
-                imported = [];
-            },
-            error: function(response){
-                console.log('Error:' + JSON.stringify(response));
-            }
-        })
+        if (document.getElementById('WMEImportButton') > 0){
+            document.getElementById('WMEImportButton').disabled = true;
         }
+        // Make sure the save popover is shown before running the script
+        var selector = ".save-popover"
+        waitForEl(selector, function() {
+
+        if ($(".save-popover").find(".error-list").length > 0){
+            if (imported.length > 0){
+                if (window.confirm("De hmp's zijn niet opgeslagen. Refresh de pagina en probeer het opnieuw.")){
+                    location.reload();
+                } else {
+                    location.reload();
+                }
+            }
+        } else {
+            if (imported.length > 0){
+                var jsonString = JSON.stringify(imported);
+
+                $.ajax({
+                    url: 'https://hmps.sjorsluyckx.nl/save.php',
+                    type: "GET",
+                    data: {"ID":jsonString},
+                    dataType: 'json',
+                    crossDomain: true,
+                    success: function(response){
+                        var countSaved = imported.length;
+                        document.getElementById('WMEIMessage').innerHTML = countSaved + " hmp's zijn geimporteerd en opgeslagen.";
+                        imported = [];
+                    },
+                    error: function(response){
+                        console.log('Error:' + JSON.stringify(response));
+                    }
+                })
+            }
+        }
+        });
     }
 
     function downloadHMPS(){
@@ -181,6 +210,11 @@
     }
 
     function buttonClick(){
+        // If there are 50 hmp's imported, save them to avoid trouble saving later.
+        if (h == 50){
+            document.getElementsByClassName('toolbar-button waze-icon-save')[0].click();
+        }
+
         // Getting the data for the place point.
         var pointdata = hmpdata[h];
         var id = pointdata.id;
