@@ -1,8 +1,9 @@
 # WME Import
-This version is intended to import the 'hectometerpaaltjes' in WME. <br>
-1. Click WMEImport.js
-2. Click the 'raw' button
-3. Copy the url
-4. Import script from the url
-<br>
+## This version is intended to import the 'hectometerpaaltjes' in WME.
+
+[How to install](https://github.com/GigaaG/WME-HMP-TOOL/wiki/Installing-WME-HMP-TOOL).
+[How to use](https://github.com/GigaaG/WME-HMP-TOOL/wiki/Using-the-WME-HMP-TOOL).
+
+[Report script problems](https://github.com/GigaaG/WME-HMP-TOOL/issues).
+
 <b> For questions, please contact GigaaG via Slack </b>
