@@ -2,7 +2,8 @@
 ## This version is intended to import the 'hectometerpaaltjes' in WME.
 
 [How to install](https://github.com/GigaaG/WME-HMP-TOOL/wiki/Installing-WME-HMP-TOOL). <br>
-[How to use](https://github.com/GigaaG/WME-HMP-TOOL/wiki/Using-the-WME-HMP-TOOL).
+[How to use](https://github.com/GigaaG/WME-HMP-TOOL/wiki/Using-the-WME-HMP-TOOL). <br>
+[Q&A](https://github.com/GigaaG/WME-HMP-TOOL/wiki/Q&A).
 
 [Report script problems](https://github.com/GigaaG/WME-HMP-TOOL/issues).
 
