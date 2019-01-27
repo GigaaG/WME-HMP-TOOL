@@ -288,15 +288,23 @@
         } catch (error) {
             console.log(error);
             W.selectionManager.setSelectedModels([NewPlace]);
-            var selector = ".tab-content"
+            var selector = ".full-address"
             waitForEl(selector, function() {
                 $(".full-address").click();
                 var selector = ".city-name.form-control"
+                console.log("wait for address");
                 waitForEl(selector, function(){
-                    $(".empty-city").prop('checked', true);
-                    $(".empty-street").prop('checked', true);
+                    while ($(".street-name.form-control").is(":enabled")){
+                        $(".empty-street").click();
+                        console.log("street none");
+                    }
+                    while ($(".city-name.form-control").is(":enabled")){
+                        $(".empty-city").click();
+                        console.log("city none");
+                    }
                     $(".save-button.waze-btn.waze-btn-blue.waze-btn-smaller").click();
-                });
+            })
+                    console.log("adress enabled");
             })
         }
     }
