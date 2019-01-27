@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         WME Import
+// @name         WME Import HMP
 // @icon         https://cdn1.iconfinder.com/data/icons/Momentum_MatteEntireSet/32/list-edit.png
 // @namespace    WMEI
-// @version      2019.01.20.9
+// @version      2019.01.27.6
 // @description  Import place points into the Waze Map
 // @author       Sjors 'GigaaG' Luyckx
 // @copyright    2019, Sjors 'GigaaG' Luyckx
@@ -40,7 +40,6 @@
 
     var waitForEl = function(selector, callback) {
         if (jQuery(selector).length) {
-            console.log('Save Popover enabled');
             callback();
         } else {
             setTimeout(function() {
@@ -92,7 +91,6 @@
         // Make sure the save popover is shown before running the script
         var selector = ".save-popover"
         waitForEl(selector, function() {
-
         if ($(".save-popover").find(".error-list").length > 0){
             if (imported.length > 0){
                 if (window.confirm("De hmp's zijn niet opgeslagen. Refresh de pagina en probeer het opnieuw.")){
@@ -268,9 +266,38 @@
         // Because selecting fails sometimes.
         try {
             W.selectionManager.setSelectedModels([NewPlace]);
+            // Set address 'empty'
+            var selector = ".full-address"
+            waitForEl(selector, function() {
+                $(".full-address").click();
+                var selector = ".city-name.form-control"
+                console.log("wait for address");
+                waitForEl(selector, function(){
+                    while ($(".street-name.form-control").is(":enabled")){
+                        $(".empty-street").click();
+                        console.log("street none");
+                    }
+                    while ($(".city-name.form-control").is(":enabled")){
+                        $(".empty-city").click();
+                        console.log("city none");
+                    }
+                    $(".save-button.waze-btn.waze-btn-blue.waze-btn-smaller").click();
+            })
+                    console.log("adress enabled");
+            })
         } catch (error) {
             console.log(error);
             W.selectionManager.setSelectedModels([NewPlace]);
+            var selector = ".tab-content"
+            waitForEl(selector, function() {
+                $(".full-address").click();
+                var selector = ".city-name.form-control"
+                waitForEl(selector, function(){
+                    $(".empty-city").prop('checked', true);
+                    $(".empty-street").prop('checked', true);
+                    $(".save-button.waze-btn.waze-btn-blue.waze-btn-smaller").click();
+                });
+            })
         }
     }
 
