@@ -219,7 +219,6 @@
         var x = pointdata.X;
         var y = pointdata.Y;
         var hmp = pointdata.hmp;
-        console.log(hmp);
         hmp = parseFloat(hmp).toFixed(1);
         var hmpl = pointdata.letter;
         var hmpz = pointdata.zijde;
@@ -271,19 +270,15 @@
             waitForEl(selector, function() {
                 $(".full-address").click();
                 var selector = ".city-name.form-control"
-                console.log("wait for address");
                 waitForEl(selector, function(){
                     while ($(".street-name.form-control").is(":enabled")){
                         $(".empty-street").click();
-                        console.log("street none");
                     }
                     while ($(".city-name.form-control").is(":enabled")){
                         $(".empty-city").click();
-                        console.log("city none");
                     }
                     $(".save-button.waze-btn.waze-btn-blue.waze-btn-smaller").click();
             })
-                    console.log("adress enabled");
             })
         } catch (error) {
             console.log(error);
@@ -292,19 +287,15 @@
             waitForEl(selector, function() {
                 $(".full-address").click();
                 var selector = ".city-name.form-control"
-                console.log("wait for address");
                 waitForEl(selector, function(){
                     while ($(".street-name.form-control").is(":enabled")){
                         $(".empty-street").click();
-                        console.log("street none");
                     }
                     while ($(".city-name.form-control").is(":enabled")){
                         $(".empty-city").click();
-                        console.log("city none");
                     }
                     $(".save-button.waze-btn.waze-btn-blue.waze-btn-smaller").click();
             })
-                    console.log("adress enabled");
             })
         }
     }
