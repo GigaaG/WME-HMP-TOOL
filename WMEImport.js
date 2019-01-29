@@ -2,7 +2,7 @@
 // @name         WME Import HMP
 // @icon         https://cdn1.iconfinder.com/data/icons/Momentum_MatteEntireSet/32/list-edit.png
 // @namespace    WMEI
-// @version      2019.01.27.6
+// @version      2019.01.29.3
 // @description  Import place points into the Waze Map
 // @author       Sjors 'GigaaG' Luyckx
 // @copyright    2019, Sjors 'GigaaG' Luyckx
@@ -85,9 +85,8 @@
     }
 
     function saveImported(){
-        if (document.getElementById('WMEImportButton') > 0){
-            document.getElementById('WMEImportButton').disabled = true;
-        }
+        if ($("#WMEImportButton").length > 0){
+        $("#WMEImportButton").attr("disabled", "disabled");
         // Make sure the save popover is shown before running the script
         var selector = ".save-popover"
         waitForEl(selector, function() {
@@ -120,7 +119,9 @@
                 })
             }
         }
+        $("#WMEImportButton").attr("disabled", false);
         });
+        }
     }
 
     function downloadHMPS(){
@@ -211,6 +212,7 @@
         // If there are 50 hmp's imported, save them to avoid trouble saving later.
         if (h == 50){
             document.getElementsByClassName('toolbar-button waze-icon-save')[0].click();
+            return
         }
 
         // Getting the data for the place point.
@@ -219,6 +221,7 @@
         var x = pointdata.X;
         var y = pointdata.Y;
         var hmp = pointdata.hmp;
+        console.log(hmp);
         hmp = parseFloat(hmp).toFixed(1);
         var hmpl = pointdata.letter;
         var hmpz = pointdata.zijde;
@@ -270,6 +273,7 @@
             waitForEl(selector, function() {
                 $(".full-address").click();
                 var selector = ".city-name.form-control"
+                console.log("wait for address");
                 waitForEl(selector, function(){
                     while ($(".street-name.form-control").is(":enabled")){
                         $(".empty-street").click();
@@ -283,19 +287,15 @@
         } catch (error) {
             console.log(error);
             W.selectionManager.setSelectedModels([NewPlace]);
-            var selector = ".full-address"
+            var selector = ".tab-content"
             waitForEl(selector, function() {
                 $(".full-address").click();
                 var selector = ".city-name.form-control"
                 waitForEl(selector, function(){
-                    while ($(".street-name.form-control").is(":enabled")){
-                        $(".empty-street").click();
-                    }
-                    while ($(".city-name.form-control").is(":enabled")){
-                        $(".empty-city").click();
-                    }
+                    $(".empty-city").prop('checked', true);
+                    $(".empty-street").prop('checked', true);
                     $(".save-button.waze-btn.waze-btn-blue.waze-btn-smaller").click();
-            })
+                });
             })
         }
     }
