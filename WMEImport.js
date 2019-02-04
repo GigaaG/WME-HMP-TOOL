@@ -2,7 +2,7 @@
 // @name         WME Import HMP
 // @icon         https://cdn1.iconfinder.com/data/icons/Momentum_MatteEntireSet/32/list-edit.png
 // @namespace    WMEI
-// @version      2019.02.04.1
+// @version      2019.02.04.2
 // @description  Import place points into the Waze Map
 // @author       Sjors 'GigaaG' Luyckx
 // @copyright    2019, Sjors 'GigaaG' Luyckx
@@ -33,6 +33,7 @@
     var hmpdata;
     var count;
     var h = 0;
+    var p = 0;
     var username;
     var rankUser;
     var lockLevel;
@@ -217,7 +218,7 @@
         }
 
         // Getting the data for the place point.
-        var pointdata = hmpdata[h];
+        var pointdata = hmpdata[p];
         var id = pointdata.id;
         var x = pointdata.X;
         var y = pointdata.Y;
@@ -241,6 +242,7 @@
         // Adjust the i variable and add ID to array
         imported.push(id);
         h = h + 1;
+        p = p + 1;
         document.getElementById('WMEImportButton').innerText = "Next import (" + (count - h) + ")";
 
         // Create point
