@@ -112,6 +112,7 @@
                         var countSaved = imported.length;
                         document.getElementById('WMEIMessage').innerHTML = countSaved + " hmp's zijn geimporteerd en opgeslagen.";
                         imported = [];
+                        h = 0;
                     },
                     error: function(response){
                         console.log('Error:' + JSON.stringify(response));
